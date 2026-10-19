@@ -6,8 +6,8 @@ Static website for Muusie, the AI lab building Ruums. Plain HTML, CSS and JS, no
 - Do not add a robots.txt that blocks crawling: crawlers must be able to read the noindex tag.
 
 ## Structure
-- `index.html`: home (hero, ruum vibes carousel, about, waitlist)
-- `privacy.html`, `terms.html`, `contact.html`
+- `index.html`: home (hero, ruum vibes carousel, waitlist, footer parade)
+- `about.html`, `privacy.html`, `terms.html`, `contact.html`
 - `media/`: clips (540 x 810, H.264), posters, icons
 - `assets/js/`: GSAP 3.12.5, ScrollTrigger, Lenis 1.1.13
 - Fonts (Fraunces, Nunito, SIL OFL) are embedded in each page.

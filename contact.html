@@ -147,23 +147,26 @@ button { font: inherit; color: inherit; }
 .btn:hover .arrow { transform: translateX(4px); }
 
 /* Footer */
-.foot { position: relative; padding-top: 72px; }
+.foot { position: relative; padding-top: clamp(8px, 3vh, 40px); }
 .walkway { position: relative; height: 136px; overflow: hidden; border-bottom: 1px dashed var(--line); }
-.walker {
-  position: absolute; bottom: 0; left: 0; height: 84px; width: auto;
-  animation: walk 26s linear infinite; cursor: pointer;
-}
+.walkway .dots { position: absolute; left: 0; right: 0; bottom: 19px; height: 6px; }
+.walkway .dots i { position: absolute; top: 0; width: 6px; height: 6px; border-radius: 1px; background: var(--coral); opacity: .55; transition: opacity .35s, scale .35s var(--ease-spring); }
+.walkway .dots i.eaten { opacity: 0; scale: .2; transition-duration: .12s; }
+.chomper { position: absolute; left: 0; bottom: 7px; width: 30px; height: 30px; color: var(--brand); will-change: transform; }
+.chomper svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.chomper .m-open { opacity: 0; }
+.walkway.moving .chomper .m-closed { animation: chompA .34s steps(1) infinite; }
+.walkway.moving .chomper .m-open { animation: chompB .34s steps(1) infinite; }
+.walker { position: absolute; bottom: 0; left: 0; height: 84px; width: auto; cursor: pointer; will-change: transform; outline-offset: 6px; }
 .walker img { height: 100%; width: auto; animation: waddle .55s ease-in-out infinite alternate; transform-origin: 50% 100%; }
 .walker .bubble {
-  position: absolute; bottom: 92%; left: 50%; translate: -50% 0;
+  position: absolute; bottom: 100%; left: 50%; translate: -50% -6px;
   background: var(--surface); color: var(--fg); box-shadow: var(--shadow);
   font-size: 13px; font-weight: 800; padding: 6px 12px; border-radius: 12px; white-space: nowrap;
   opacity: 0; scale: .8; transition: opacity .25s, scale .35s var(--ease-spring);
 }
-.walkway:hover .walker, .walker:focus-visible { animation-play-state: paused; }
-.walkway:hover .walker img { animation-play-state: paused; }
+.walkway.paused .walker img { animation-play-state: paused; }
 .walker:hover .bubble, .walker:focus-visible .bubble { opacity: 1; scale: 1; }
-@keyframes walk { from { transform: translateX(-120px); } to { transform: translateX(calc(100vw + 40px)); } }
 @keyframes waddle { from { transform: rotate(-4deg) translateY(0); } to { transform: rotate(4deg) translateY(-3px); } }
 
 .foot-row {
@@ -183,12 +186,17 @@ address { font-style: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .walker { animation: none; left: 24px; }
+  .walker img { animation: none; }
 }
 .br-m { display: none; }
 @media (max-width: 640px) { .br-m { display: inline; } }
 
-.doc { max-width: 720px; margin: 0 auto; padding-block: clamp(40px, 8vh, 96px) 24px; }
+
+
+.doc { max-width: 720px; margin: 0 auto;
+}
+.doc.doc-wide { max-width: 1240px; }
+.doc { padding-block: clamp(40px, 8vh, 96px) 24px; }
 .doc .back { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 800; text-decoration: none; color: var(--muted); }
 .doc .back:hover { color: var(--fg); }
 .doc h1 { margin: 18px 0 0; font-family: var(--display); font-variation-settings: "SOFT" 100; font-weight: 740; font-size: clamp(40px, 6vw, 72px); line-height: .98; letter-spacing: -.025em; text-wrap: balance; }
@@ -216,10 +224,10 @@ address { font-style: normal; }
       <span class="brand-line"><b>Muusie</b> is an AI lab<br class="br-m"> building <b>Ruums</b></span>
     </a>
     <nav class="nav" aria-label="Main">
-      <a class="nav-link" href="./#about">About</a>
+      <a class="nav-link" href="about.html">About</a>
       <a class="nav-link" href="https://discord.gg/W47T7QUAN" target="_blank" rel="noopener">Discord</a>
       <a class="nav-link" href="https://www.tiktok.com/@ruums" target="_blank" rel="noopener">TikTok</a>
-      <a class="btn btn-coral btn-sm" href="./">Get Ruums</a>
+      <a class="btn btn-coral btn-sm" href="./#waitlist">Get Ruums</a>
     </nav>
   </header>
   <main class="wrap">
@@ -236,17 +244,50 @@ address { font-style: normal; }
     </article>
   </main>
   <footer class="foot wrap">
-    <div class="walkway">
+    <div class="walkway" aria-hidden="false">
+      <div class="dots" aria-hidden="true"></div>
+      <span class="chomper" aria-hidden="true"><svg class="m-closed" viewBox="0 0 1667 1667" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 833.500 1 L 496 1 496 50.500 L 496 100 396.500 100 L 297 100 297 149.500 L 297 199 248 199 L 199 199 199 248 L 199 297 148.500 297 L 98 297 98 396 L 98 495 49 495 L 0 495 0 834 L 0 1173 49.500 1173 L 99 1173 99 1272 L 99 1371 149 1371 L 199 1371 199 1419.490 L 199 1467.981 247.750 1468.240 L 296.500 1468.500 296.759 1518.250 L 297.019 1568 396.509 1568 L 496 1568 496 1616.836 L 496 1665.671 660.457 1666.362 L 824.914 1667.052 997.957 1666.362 L 1171 1665.671 1171 1616.336 L 1171 1567 1270.500 1567 L 1370 1567 1370 1517.510 L 1370 1468.019 1418.750 1467.760 L 1467.500 1467.500 1467.760 1418.750 L 1468.019 1370 1518.510 1370 L 1569 1370 1569 1271 L 1569 1172 1618.500 1172 L 1668 1172 1668 833 L 1668 494 1618.005 494 L 1568.010 494 1567.755 395.250 L 1567.500 296.500 1517.750 296.241 L 1468 295.981 1468 247.491 L 1468 199 1419 199 L 1370 199 1370 149 L 1370 99 1270.500 99 L 1171 99 1171 50 L 1171 1 833.500 1 M 834 77 L 568 77 568 126.500 L 568 176 469 176 L 370 176 370 225.500 L 370 275 321.010 275 L 272.019 275 271.760 323.750 L 271.500 372.500 221.250 372.759 L 171 373.018 171 472.009 L 171 571 122 571 L 73 571 73 834 L 73 1097 122.500 1097 L 172 1097 172 1196 L 172 1295 222 1295 L 272 1295 272 1343.490 L 272 1391.981 320.750 1392.240 L 369.500 1392.500 369.759 1442.245 L 370.019 1491.990 469.259 1492.245 L 568.500 1492.500 568.759 1541.115 L 569.019 1589.730 698.259 1590.189 L 827.500 1590.649 963.741 1590.190 L 1099.981 1589.731 1100.241 1540.616 L 1100.500 1491.500 1199.750 1491.245 L 1299 1490.990 1299 1441.495 L 1299 1392 1348 1392 L 1397 1392 1397 1343 L 1397 1294 1447.500 1294 L 1498 1294 1498 1195 L 1498 1096 1547 1096 L 1596 1096 1596 833 L 1596 570 1546.500 570 L 1497 570 1497 471 L 1497 372 1447 372 L 1397 372 1397 323.510 L 1397 275.019 1348.250 274.760 L 1299.500 274.500 1299.241 224.750 L 1298.981 175 1199.491 175 L 1100 175 1100 126 L 1100 77 834 77 M 543.500 433 L 495 433 495 434.008 L 495 435.016 374.340 785.758 L 253.681 1136.500 253.590 1138.382 L 253.500 1140.264 300.500 1156.508 L 347.500 1172.751 348.099 1172.126 L 348.697 1171.500 469.599 852.201 L 590.500 532.903 590.760 578.951 L 591.020 625 639.010 625 L 687 625 687 673 L 687 721 735 721 L 783 721 783 769 L 783 817 831 817 L 879 817 879 769 L 879 721 927 721 L 975 721 975 673 L 975 625 1022.990 625 L 1070.980 625 1071.240 578.288 L 1071.500 531.575 1193.409 850.038 L 1315.318 1168.500 1316.409 1170.631 L 1317.500 1172.762 1363 1157.041 L 1408.500 1141.321 1408.402 1139.411 L 1408.304 1137.500 1287.652 787.067 L 1167 436.635 1167 434.817 L 1167 433 1119 433 L 1071 433 1071 481 L 1071 529 1023 529 L 975 529 975 577 L 975 625 927 625 L 879 625 879 673 L 879 721 831.500 721 L 784 721 784 673 L 784 625 736 625 L 688 625 688 577 L 688 529 640 529 L 592 529 592 481 L 592 433 543.500 433 M 0.750 664.250 L 0.494 494.500 0.494 834 L 0.494 1173.500 0.750 1003.750 L 1.006 834 0.750 664.250"/></svg><svg class="m-open" viewBox="0 0 1667 1667" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M 833.500 1 L 496 1 496 50.500 L 496 100 396.500 100 L 297 100 297 149.500 L 297 199 248 199 L 199 199 199 248 L 199 297 148.500 297 L 98 297 98 396 L 98 495 49 495 L 0 495 0 834 L 0 1173 49.500 1173 L 99 1173 99 1272 L 99 1371 149 1371 L 199 1371 199 1419.490 L 199 1467.981 247.750 1468.240 L 296.500 1468.500 296.759 1518.250 L 297.019 1568 396.509 1568 L 496 1568 496 1616.836 L 496 1665.671 660.457 1666.362 L 824.914 1667.052 997.957 1666.362 L 1171 1665.671 1171 1616.336 L 1171 1567 1270.500 1567 L 1370 1567 1370 1517.510 L 1370 1468.019 1418.750 1467.760 L 1467.500 1467.500 1467.760 1418.750 L 1468.019 1370 1518.510 1370 L 1569 1370 1569.006 1349.250 L 1569.011 1328.500 1567.913 1193.500 L 1566.816 1058.500 1566.528 1058.203 L 1566.240 1057.907 1315.870 966.878 L 1065.500 875.848 1064.785 875.159 L 1064.070 874.470 1315.096 752.041 L 1566.122 629.612 1566.426 629.056 L 1566.730 628.500 1567.115 462.500 L 1567.500 296.500 1517.750 296.241 L 1468 295.981 1468 247.491 L 1468 199 1419 199 L 1370 199 1370 149 L 1370 99 1270.500 99 L 1171 99 1171 50 L 1171 1 833.500 1 M 834 77 L 568 77 568 126.500 L 568 176 469 176 L 370 176 370 225.500 L 370 275 321.010 275 L 272.019 275 271.760 323.750 L 271.500 372.500 221.250 372.759 L 171 373.018 171 472.009 L 171 571 122 571 L 73 571 73 834 L 73 1097 122.500 1097 L 172 1097 172 1196 L 172 1295 222 1295 L 272 1295 272 1343.490 L 272 1391.981 320.750 1392.240 L 369.500 1392.500 369.759 1442.245 L 370.019 1491.990 469.259 1492.245 L 568.500 1492.500 568.759 1541.115 L 569.019 1589.730 698.259 1590.189 L 827.500 1590.649 963.741 1590.190 L 1099.981 1589.731 1100.241 1540.616 L 1100.500 1491.500 1199.750 1491.245 L 1299 1490.990 1299 1441.495 L 1299 1392 1348 1392 L 1397 1392 1397 1343 L 1397 1294 1447.500 1294 L 1498 1294 1497.982 1195.250 L 1497.964 1096.500 1426.232 1071.831 L 1354.500 1047.162 1111.717 963.414 L 868.934 879.666 869.749 878.851 L 870.565 878.035 1034.418 797.268 L 1198.272 716.500 1198.386 715.893 L 1198.500 715.286 1135.073 610.653 L 1071.647 506.020 1071.471 506.260 L 1071.295 506.500 1077.293 552.771 L 1083.291 599.043 1082.808 599.526 L 1082.325 600.009 1035.530 606.039 L 988.735 612.069 988.209 611.542 L 987.682 611.015 981.757 564.948 L 975.832 518.881 976.305 517.648 L 976.778 516.414 1023.389 510.477 L 1070 504.539 1069.995 502.019 L 1069.991 499.500 1064.500 457 L 1059.009 414.500 1059.005 411.750 L 1059 409 1060.250 408.996 L 1061.500 408.991 1104 403.517 L 1146.500 398.042 1150.112 397.457 L 1153.724 396.871 1154.353 400.806 L 1154.982 404.741 1221.004 538.121 L 1287.025 671.500 1288.385 671.500 L 1289.746 671.500 1393.372 620.500 L 1496.998 569.500 1496.999 470.750 L 1497 372 1447 372 L 1397 372 1397 323.510 L 1397 275.019 1348.250 274.760 L 1299.500 274.500 1299.241 224.750 L 1298.981 175 1199.491 175 L 1100 175 1100 126 L 1100 77 834 77 M 579.750 471.123 L 575.500 471.246 532 477.040 L 488.500 482.833 488.250 482.916 L 488 483 488 485.120 L 488 487.240 413 851.107 L 338 1214.973 338.002 1215.737 L 338.004 1216.500 384.752 1226.097 L 431.500 1235.693 432.103 1234.597 L 432.706 1233.500 514.089 901.320 L 595.473 569.140 595.676 569.343 L 595.879 569.546 601.598 614.523 L 607.318 659.500 607.952 660.243 L 608.586 660.986 655.414 654.947 L 702.242 648.908 702.519 649.204 L 702.796 649.500 708.806 696.324 L 714.815 743.149 715.160 743.493 L 715.504 743.837 762.321 737.821 L 809.138 731.804 809.601 732.268 L 810.065 732.731 816.079 779.112 L 822.094 825.494 822.797 826.086 L 823.500 826.678 870.500 820.561 L 917.500 814.445 917.299 812.472 L 917.098 810.500 911.356 765.276 L 905.614 720.053 906.057 719.633 L 906.500 719.214 952.340 713.361 L 998.179 707.507 999.283 706.825 L 1000.388 706.142 994.444 659.445 L 988.500 612.748 987.356 612.308 L 986.213 611.868 940.052 617.821 L 893.892 623.775 893.362 624.305 L 892.832 624.835 898.868 671.632 L 904.904 718.429 904.605 718.728 L 904.306 719.028 857.532 725.060 L 810.758 731.092 810.516 730.796 L 810.273 730.500 804.279 683.726 L 798.285 636.951 797.890 636.557 L 797.496 636.163 750.679 642.179 L 703.862 648.196 703.450 647.783 L 703.038 647.371 697.032 600.999 L 691.026 554.626 690.263 553.974 L 689.500 553.322 643.252 559.330 L 597.005 565.338 596.320 564.653 L 595.635 563.968 589.853 519.234 L 584.070 474.500 584.035 472.750 L 584 471 579.750 471.123"/></svg></span>
       <span class="walker" tabindex="0" aria-label="A Ruums bear walking by"><span class="bubble">Hey, new friend</span><img src="media/bear-walk.png" alt="" width="70" height="84"></span>
     </div>
     <div class="foot-row">
       <address>&copy; 2026 Muusie, Inc. &middot; 520 Broadway, Santa Monica, CA 90401, US</address>
       <nav class="foot-links" aria-label="Footer">
-        <a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a>
+        <a href="about.html">About</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a>
         <a href="https://discord.gg/W47T7QUAN" target="_blank" rel="noopener">Discord</a><a href="https://www.tiktok.com/@ruums" target="_blank" rel="noopener">TikTok</a>
       </nav>
     </div>
   </footer>
+  <script>
+(function () {
+  var way = document.querySelector('.walkway'); if (!way) return;
+  var dotsBox = way.querySelector('.dots'), m = way.querySelector('.chomper'), bear = way.querySelector('.walker');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dots = [], W = 0, GAP = 34, x = 0, paused = false, last = 0, SPEED = 72, LAG = 120;
+  function speed() { return Math.max(48, Math.min(90, W / 16)); }
+  function layout() {
+    W = way.clientWidth; dotsBox.innerHTML = ''; dots = [];
+    for (var px = GAP; px < W - 10; px += GAP) { var d = document.createElement('i'); d.style.left = px + 'px'; dotsBox.appendChild(d); dots.push({ el: d, x: px }); }
+  }
+  function place() {
+    m.style.transform = 'translateX(' + x + 'px)';
+    bear.style.transform = 'translateX(' + (x - LAG) + 'px)';
+    for (var i = 0; i < dots.length; i++) { var on = dots[i].x < x + 18 && dots[i].x > x - LAG - 40; dots[i].el.classList.toggle('eaten', on); }
+  }
+  layout(); window.addEventListener('resize', layout);
+  if (reduce) { x = Math.min(W * .5, 260); place(); return; }
+  x = -40; way.classList.add('moving');
+  bear.addEventListener('mouseenter', function () { paused = true; way.classList.add('paused'); way.classList.remove('moving'); });
+  bear.addEventListener('mouseleave', function () { paused = false; way.classList.remove('paused'); way.classList.add('moving'); });
+  bear.addEventListener('focus', function () { paused = true; way.classList.add('paused'); way.classList.remove('moving'); });
+  bear.addEventListener('blur', function () { paused = false; way.classList.remove('paused'); way.classList.add('moving'); });
+  function tick(t) {
+    var dt = last ? Math.min(64, t - last) / 1000 : 0; last = t;
+    if (!paused) { x += speed() * dt; if (x - LAG > W + 40) x = -40; place(); }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
 </div>
 <script>
 (function () {
